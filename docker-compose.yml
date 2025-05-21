@@ -14,10 +14,8 @@ services:
     networks:
       - app-network
     command: pnpm run start:dev
-    expose:
-      - '3012'
     ports:
-      - '3012:3012'
+      - '3001:3000'
     environment:
       - NEXT_TELEMETRY_DISABLED=1
       - DATABASE_HOST=postgres
@@ -51,7 +49,7 @@ services:
       - postgres
     restart: unless-stopped
     ports:
-      - "9134:8080"
+      - "3002:8080"
     networks:
       - app-network
 
