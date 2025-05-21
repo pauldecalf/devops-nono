@@ -27,8 +27,6 @@ services:
     image: postgres:16-alpine
     container_name: postgres-db
     environment:
-      - PORT=3002
-    environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: dockdock
@@ -38,18 +36,27 @@ services:
     restart: unless-stopped
     networks:
       - app-network
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3002
+      - NEXT_TELEMETRY_DISABLED=1
 
   adminer:
     image: adminer
     container_name: adminer
     environment:
-      - PORT=3003
       - ADMINER_DEFAULT_SERVER=postgres
     depends_on:
       - postgres
     restart: unless-stopped
     networks:
       - app-network
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3003
+      - NEXT_TELEMETRY_DISABLED=1
 
 networks:
   app-network:
