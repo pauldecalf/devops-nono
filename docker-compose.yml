@@ -14,6 +14,8 @@ services:
     networks:
       - app-network
     command: pnpm run start:dev
+    expose:
+      - '3012'
     ports:
       - '3012:3012'
     environment:
