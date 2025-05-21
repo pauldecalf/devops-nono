@@ -23,6 +23,12 @@ services:
     networks:
       - app-network
     command: pnpm run start:dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=3003"
 
   postgres:
     image: postgres:16-alpine
