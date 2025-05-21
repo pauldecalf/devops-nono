@@ -15,7 +15,7 @@ services:
       - app-network
     command: pnpm run start:dev
     ports:
-      - '3001:3000'
+      - '3001:3001'
     environment:
       - NEXT_TELEMETRY_DISABLED=1
       - DATABASE_HOST=postgres
