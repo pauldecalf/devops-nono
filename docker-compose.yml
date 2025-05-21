@@ -49,7 +49,7 @@ services:
       - postgres
     restart: unless-stopped
     ports:
-      - "3002:8080"  # host:container
+      - "8080:8080"  # host:container
     networks:
       - app-network
 
