@@ -51,7 +51,7 @@ services:
       - postgres
     restart: unless-stopped
     ports:
-      - '1234:1234'
+      - "9134:8080"
     networks:
       - app-network
 
