@@ -4,17 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: nestjs-app
-    ports:
-      - "9010:9010"
-    environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
-      - PORT=3003
-      - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_NAME=dockdock
     volumes:
       - nest-app-node-modules:/usr/src/app/node_modules
     depends_on:
@@ -23,18 +12,22 @@ services:
     networks:
       - app-network
     command: pnpm run start:dev
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=Host(`prometheus.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.prometheus.entrypoints=websecure"
-      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9010"
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3001
+      - NEXT_TELEMETRY_DISABLED=1
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=dockdock
 
   postgres:
     image: postgres:16-alpine
     container_name: postgres-db
-    ports:
-      - '5432:5432'
+    environment:
+      - PORT=3002
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -49,9 +42,8 @@ services:
   adminer:
     image: adminer
     container_name: adminer
-    ports:
-      - '8081:8080'
     environment:
+      - PORT=3003
       - ADMINER_DEFAULT_SERVER=postgres
     depends_on:
       - postgres
