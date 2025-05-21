@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs-app
+    ports:
+      - '3003:3000'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=dockdock
+    volumes:
+      - nest-app-node-modules:/usr/src/app/node_modules
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - app-network
+    command: pnpm run start:dev
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dockdock
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - '8081:8080'
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  nest-app-node-modules:
